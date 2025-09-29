@@ -10,3 +10,7 @@ build
 
 .idea
 .DS_Store
+
+*.zip
+
+src/main/kotlin/es/unizar/webeng/lab2/TimeComponent.kt
