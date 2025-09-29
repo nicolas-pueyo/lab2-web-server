@@ -22,20 +22,23 @@ class IntegrationTest {
 
     @Test
     fun testHomePage() {
-                // Crear encabezado con el tipo de respuesta esperado (HTML)
         val headers = HttpHeaders()
         headers.set("Accept", "text/html")
 
-        // Crear la solicitud con el encabezado configurado
         val entity = HttpEntity<String>(headers)
 
-        // Realizar la solicitud a la ruta /
         val response = restTemplate.exchange("http://localhost:$port/", HttpMethod.GET, entity, String::class.java)
 
-        // Verificar que el código de estado sea 404
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-
-        // Verificar que el cuerpo de la respuesta contenga el mensaje de error de la página error.html
         assertThat(response.body).contains("¡Vaya! Algo salió mal.")
+    }
+
+    @Test
+    fun testTimeEndpoint() {
+        val response = restTemplate.getForEntity("http://localhost:$port/time", TimeDTO::class.java)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isNotNull
+        assertThat(response.body?.time).isNotNull
+        assertThat(response.body?.time?.year).isGreaterThan(2000) // Asegurarse de que el año sea razonable
     }
 }
