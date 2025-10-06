@@ -1,24 +1,26 @@
 package es.unizar.webeng.lab2
 
+import es.unizar.webeng.lab2.TimeDTO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
-import es.unizar.webeng.lab2.TimeDTO
+import org.springframework.http.HttpStatus
+import org.springframework.context.annotation.Import
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(TestConfig::class)
 class IntegrationTest {
     @LocalServerPort
     private var port: Int = 0
 
     @Autowired
-    private lateinit var restTemplate: TestRestTemplate
+    lateinit var restTemplate: TestRestTemplate
 
     @Test
     fun testHomePage() {
@@ -27,7 +29,7 @@ class IntegrationTest {
 
         val entity = HttpEntity<String>(headers)
 
-        val response = restTemplate.exchange("http://localhost:$port/", HttpMethod.GET, entity, String::class.java)
+        val response = restTemplate.exchange("https://localhost:$port/", HttpMethod.GET, entity, String::class.java)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(response.body).contains("¡Vaya! Algo salió mal.")
@@ -35,10 +37,10 @@ class IntegrationTest {
 
     @Test
     fun testTimeEndpoint() {
-        val response = restTemplate.getForEntity("http://localhost:$port/time", TimeDTO::class.java)
+        val response = restTemplate.getForEntity("https://localhost:$port/time", TimeDTO::class.java)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isNotNull
         assertThat(response.body?.time).isNotNull
-        assertThat(response.body?.time?.year).isGreaterThan(2000) // Asegurarse de que el año sea razonable
+        assertThat(response.body?.time?.year).isGreaterThan(2000)
     }
 }

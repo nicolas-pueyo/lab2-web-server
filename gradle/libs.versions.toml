@@ -16,3 +16,4 @@ spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-start
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 assertj-core = { module = "org.assertj:assertj-core" }
+apache-http-components-client5 = { module = "org.apache.httpcomponents.client5:httpclient5", version = "5.3.1" }
